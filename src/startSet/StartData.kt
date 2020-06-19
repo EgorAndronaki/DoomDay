@@ -1,5 +1,6 @@
 package startSet
 
+import programs.BaseProgram
 import java.lang.NullPointerException
 
 class StartData(numPlayers: Int) {
@@ -20,27 +21,8 @@ class StartData(numPlayers: Int) {
         return roles
     }
 
-    fun getPrograms(): MutableList<Program> {
+    fun getPrograms(): MutableList<BaseProgram> {
         return programs
-    }
-
-    private fun factionToString(faction: Faction): String {
-        return when (faction) {
-            Faction.HUMAN -> "Человек"
-            Faction.MACHINE -> "Машина"
-            Faction.ROGUE -> "Изгой"
-        }
-    }
-
-    fun loyaltyCardToString(loyaltyCard: LoyaltyCard?): String {
-        if (loyaltyCard != null) {
-            return if (loyaltyCard.x2) { factionToString(loyaltyCard.faction) + " X2" } else { factionToString(loyaltyCard.faction) }
-        }
-        throw NullPointerException("Something went wrong with converting a loyalty card to string.")
-    }
-
-    fun roleToString(role: Role): String {
-        return "Твоя роль: " + role.name + " (" + factionToString(role.faction) + ")!" + "\n" + "Твои способности: " + role.description
     }
 
     fun weaponToString(weapon: Weapon): String {
@@ -50,6 +32,16 @@ class StartData(numPlayers: Int) {
             Weapon.PARTNER -> "Напарник"
             Weapon.MISSILE -> "Ракетница"
             Weapon.LASER -> "Лазер"
+            Weapon.NO_WEAPON -> "нет оружия"
+        }
+    }
+
+    fun sortPrograms(numPlayers: Int) {
+        if (numPlayers in 4..8) {
+            programs.removeIf { it.name == "Лазер" || it.name == "Ракетница" || it.name == "Небольшой апдейт"}
+        }
+        else if (numPlayers in 9..10) {
+            programs.removeIf {it.name == "Лазер"}
         }
     }
 }

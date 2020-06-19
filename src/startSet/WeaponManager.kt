@@ -8,7 +8,8 @@ enum class Weapon {
     RIFLE,
     PARTNER,
     MISSILE,
-    LASER
+    LASER,
+    NO_WEAPON
 }
 
 class WeaponManager {

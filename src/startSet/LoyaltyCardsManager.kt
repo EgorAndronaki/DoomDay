@@ -10,7 +10,8 @@ data class LoyaltyCard(val faction: Faction, val x2: Boolean) {
 enum class Faction {
     HUMAN,
     MACHINE,
-    ROGUE
+    ROGUE,
+    UNDEFINED
 }
 
 class LoyaltyCardsManager {

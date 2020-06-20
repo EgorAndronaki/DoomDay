@@ -1,7 +1,7 @@
 package startSet
 
 import programs.BaseProgram
-import java.lang.NullPointerException
+import roles.BaseRole
 
 class StartData(numPlayers: Int) {
     private val weapons = WeaponManager().getWeapons(numPlayers)
@@ -17,7 +17,7 @@ class StartData(numPlayers: Int) {
         return loyaltyCards
     }
 
-    fun getRoles(): MutableList<Role> {
+    fun getRoles(): MutableList<BaseRole> {
         return roles
     }
 

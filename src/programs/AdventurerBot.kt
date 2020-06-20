@@ -9,7 +9,7 @@ class AdventurerBot(override val name: String, override val timeOfPlay: Time, ov
     override fun execute(caster: Player, target: Player?, targets: List<Player>?) {
         for (player in targets!!) {
             if (player.weapon.first != Weapon.NO_WEAPON) {
-                println(player.roleToString(player.role))
+                println(player.roleToString(player, player.role))
             }
         }
     }

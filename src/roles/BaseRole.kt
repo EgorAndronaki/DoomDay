@@ -12,5 +12,5 @@ interface BaseRole {
     var hidden: Boolean
 
     fun useEffect(caster: Player, players: List<Player>)
-    fun useConstEffect(caster: Player, players: List<Player>)
+    fun useConstEffect(caster: Player, target: Player? = null, players: List<Player>)
 }

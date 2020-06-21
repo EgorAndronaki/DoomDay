@@ -2,7 +2,6 @@ package startSet
 
 import Player
 import programs.BaseProgram
-import java.lang.NullPointerException
 
 fun prepare(): Triple<MutableList<Player>, MutableList<BaseProgram>, MutableList<Weapon>> {
     println("Введите количество игроков:")
@@ -20,7 +19,11 @@ fun prepare(): Triple<MutableList<Player>, MutableList<BaseProgram>, MutableList
         for (i in 0 until numPlayers) {
             println("Введите имя игрока:")
             val name = readLine() ?: "Игрок ${i + 1}"
-            val player = Player(name, roles[0], mutableMapOf("Левая" to loyaltyCards[0], "Правая" to loyaltyCards[1]))
+            val player = Player(
+                name,
+                roles[0],
+                mutableMapOf("Левая" to loyaltyCards[0], "Правая" to loyaltyCards[1])
+            )
             players.add(player)
             roles.removeAt(0)
             loyaltyCards.removeAt(0)
@@ -33,10 +36,16 @@ fun prepare(): Triple<MutableList<Player>, MutableList<BaseProgram>, MutableList
             println("Введите имя игрока:")
             val name = readLine() ?: "Игрок ${i + 1}"
             val player = if (i == 0) {
-                Player(name, roles[0], mutableMapOf("Левая" to loyaltyCards[0], "Правая" to LoyaltyCard(Faction.UNDEFINED, false)))
+                Player(
+                    name,
+                    roles[0],
+                    mutableMapOf("Левая" to loyaltyCards[0], "Правая" to LoyaltyCard(Faction.UNDEFINED, false))
+                )
             } else {
-                Player(name, roles[0],
-                    mutableMapOf("Левая" to loyaltyCards[0], "Правая" to players[i-1].loyaltyCards["Левая"]!!))
+                Player(
+                    name, roles[0],
+                    mutableMapOf("Левая" to loyaltyCards[0], "Правая" to players[i - 1].loyaltyCards["Левая"]!!)
+                )
             }
             players.add(player)
             roles.removeAt(0)

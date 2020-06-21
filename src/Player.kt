@@ -1,4 +1,3 @@
-import programs.BaseProgram
 import roles.BaseRole
 import startSet.*
 import startSet.Faction.*
@@ -40,11 +39,17 @@ class Player(val name: String, var role: BaseRole, var loyaltyCards: MutableMap<
                     }
                 }
             }
+            else if (damage == -1) {
+                target.lives++
+                if (target.lives > 2) {
+                    target.lives = 2
+                }
+            }
             else {
                 if (!target.role.hidden) {
                     if (target.role.name == "Информатор") {
                         println("Сработал эффект Информатора! ${target.name} наносится 1 урон!")
-                        target.role.useConstEffect(target, players)
+                        target.role.useConstEffect(target, null, players)
                     }
                     else {
                         target.lives -= 2
@@ -74,11 +79,27 @@ class Player(val name: String, var role: BaseRole, var loyaltyCards: MutableMap<
                 println("Левая карта верности - ${target.loyaltyCardToString(target.loyaltyCards["Левая"])}," +
                         " правая - ${target.loyaltyCardToString(target.loyaltyCards["Правая"])}")
                 if (target.role.name == "Наемник") {
-                    println("Срабатывает способность Наемника! Он может убить выбранного игрока!")
+                    println("Срабатывает эффект Наемника! Он может убить выбранного игрока!")
                     target.role.useEffect(target, players)
                 }
             }
         }
+    }
+
+    fun calcDamage(): Int {
+        return if (weapon.first == Weapon.PISTOL || weapon.first == Weapon.MISSILE) {
+            1
+        }
+        else if (weapon.first == Weapon.PARTNER) {
+            println("Бить или лечить?")
+            if (readLine() == "Бить") {
+                1
+            }
+            else {
+                -1
+            }
+        }
+        else 2
     }
 
     private fun hiddenOrNot(hidden: Boolean): String {
@@ -162,6 +183,7 @@ class Player(val name: String, var role: BaseRole, var loyaltyCards: MutableMap<
         }
     }
 
+
     fun loyaltyCardToString(loyaltyCard: LoyaltyCard?): String {
         if (loyaltyCard != null) {
             return if (loyaltyCard.x2) { factionToString(loyaltyCard.faction) + " X2" } else { factionToString(loyaltyCard.faction) }
@@ -181,19 +203,27 @@ class Player(val name: String, var role: BaseRole, var loyaltyCards: MutableMap<
     }
 
     fun aim(weapon: Weapon, players: List<Player>) {
-        this.weapon = if (weapon == Weapon.MISSILE) {
-            println("Выбери две цели. Они должны сидеть рядом:")
-            val name1 = readLine()
-            val name2 = readLine()
-            val player1 = players.find { it.name == name1}
-            val player2 = players.find { it.name == name2 }
-            Pair(weapon, listOf(player1!!, player2!!))
+        if (weapon == Weapon.MISSILE) {
+            if (players.filter { it != this }.size == 1) {
+                this.weapon = Pair(weapon, listOf(players.filter { it != this }.toList()[0]))
+            }
+            else {
+                println("Выбери две цели. Они должны сидеть рядом:")
+                println("Список живых игроков: ${players.joinToString { it.name }}")
+                val name1 = readLine()
+                val name2 = readLine()
+                val player1 = players.find { it.name == name1 }
+                val player2 = players.find { it.name == name2 }
+                this.weapon = Pair(weapon, listOf(player1!!, player2!!))
+            }
         } else {
             println("Выбери цель. Это может быть кто угодно, кроме тебя:")
+            println("Список живых игроков: ${players.filter { it != this }.joinToString { it.name } }")
             val name = readLine()
             val player = players.find { it.name == name }
-            Pair(weapon, listOf(player!!))
+            this.weapon = Pair(weapon, listOf(player!!))
         }
+        println("$name нацеливает ${weaponToString(this.weapon.first)} на ${this.weapon.second!!.joinToString { it.name }}!")
     }
 
     fun watchLoyalty(target: Player) {
@@ -233,5 +263,15 @@ class Player(val name: String, var role: BaseRole, var loyaltyCards: MutableMap<
     fun openRole(target: Player) {
         println(roleToString(target, target.role))
         target.role.hidden = false
+    }
+
+    fun hideLoyalty(target: Player, side: String) {
+        println("$side карта верности ${target.name} теперь скрыта!")
+        target.loyaltyCards[side]!!.hidden = true
+    }
+
+    fun hideRole(target: Player) {
+        println("Роль ${target.name} теперь скрыта!")
+        target.role.hidden = true
     }
 }

@@ -22,7 +22,7 @@ class WeaponManager {
 
     fun getWeapons(numPlayers: Int): MutableList<Weapon> {
         if (!weapons.containsKey(numPlayers))
-            throw IllegalArgumentException("Wrong number of players.")
+            throw IllegalArgumentException("Wrong number of four_eight.getPlayers.")
         return weapons.getOrElse(numPlayers) { throw  NullPointerException("No weapons found.")}.toMutableList()
     }
 }

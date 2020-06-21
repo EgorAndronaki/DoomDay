@@ -7,11 +7,12 @@ import startSet.Faction
 class BrainlessBot(override val name: String, override val faction: Faction, override val always: Boolean, override val effect: String?,
                    override val constEffect: String?, override var hidden: Boolean) : BaseRole {
 
-    override fun useConstEffect(caster: Player, players: List<Player>) {
+    override fun useConstEffect(caster: Player, target: Player?, players: List<Player>) {
         return
     }
 
     override fun useEffect(caster: Player, players: List<Player>) {
+        println("Срабатывает эффект Безмозглого бота! ${caster.name} открывает карту верности одного игрока, рольь другого и может нанести повреждение третьему!")
         var player1: Player? = null
         var player2: Player? = null
         if (players.any { it.getHiddenLoyalty().isNotEmpty() && it != caster }) {

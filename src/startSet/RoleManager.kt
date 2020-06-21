@@ -44,9 +44,9 @@ class RoleManager {
         14 to pickRoles(6, 6, 4), 15 to pickRoles(6, 6, 4), 16 to pickRoles(6, 6, 5))
 
     private fun pickRoles(human: Int, machine: Int, rogue: Int): List<BaseRole> {
-        val shuffledHuman = humanRoles.shuffle()
-        val shuffledMachine = machineRoles.shuffle()
-        val shuffledRogue = rogueRoles.shuffle()
+        val shuffledHuman = humanRoles.shuffled()
+        val shuffledMachine = machineRoles.shuffled()
+        val shuffledRogue = rogueRoles.shuffled()
         return shuffledHuman.take(human) + shuffledMachine.take(machine) + shuffledRogue.take(rogue)
     }
 
@@ -54,17 +54,7 @@ class RoleManager {
         if(!roles.containsKey(numPlayers)) {
             throw IllegalArgumentException("Wrong number of players.")
         }
-        println(roles)
+        println(roles.getValue(numPlayers).map { it.name })
         return roles.getOrElse(numPlayers) {throw  NullPointerException("No roles found.")}.shuffled().toMutableList()
     }
-}
-
-private fun MutableList<BaseRole>.shuffle(): MutableList<BaseRole> {
-    val res = mutableListOf<BaseRole>()
-    while(this.isNotEmpty()) {
-        val current = this[Random.nextInt(0, size)]
-        res.add(current)
-        remove(current)
-    }
-    return res
 }
